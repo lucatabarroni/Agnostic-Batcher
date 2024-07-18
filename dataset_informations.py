@@ -2,14 +2,16 @@ import numpy as np
 import uproot
 import os
 import pickle
+import random
 
 class partitioner():
-    def __init__(self,directories,tree_name,tr_size=0.5,te_size=0.3,val_size=0.2):
+    def __init__(self,directories,tree_name,tr_size=0.5,te_size=0.3,val_size=0.2,shuffle=False):
         self.dir=directories
         self.tn=tree_name
         self.train_size=tr_size
         self.test_size=te_size
         self.validation_size=val_size
+        self.shuffle=shuffle
         
         self.fl=[]
         self.fs=[]
@@ -32,6 +34,10 @@ class partitioner():
         for directory in self.dir:
             list_to_append=[os.path.join(directory, file) for file in os.listdir(directory)]
             self.fl.append(list_to_append)
+##aggiunta dello shuffle dei file in ogni directory, in modo tale che si possano ottenere anche train,test e validation diversi
+        if self.shuffle:
+            for i in range(len(self.fl)):
+                random.shuffle(self.fl[i])                
         
         for i,directory in enumerate(self.fl):
             sizes_to_append=[]

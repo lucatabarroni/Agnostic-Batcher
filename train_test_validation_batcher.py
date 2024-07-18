@@ -1,7 +1,7 @@
 from dataset_informations import partitioner
 import numpy as np
 class batcher(partitioner):
-    def __init__(self, directories, tree_name,batch_size=64,training_size=1,testing_size=0,validation_size=0):
+    def __init__(self, directories, tree_name,batch_size=64,training_size=1,testing_size=0,validation_size=0,shuffle=False):
         self.dir=directories
         self.tn=tree_name
         
@@ -10,8 +10,10 @@ class batcher(partitioner):
         self.tr_s=training_size
         self.te_s=testing_size
         self.va_s=validation_size
+
+        self.shuffle=shuffle
         
-        super().__init__(self.dir,self.tn,self.tr_s,self.te_s,self.va_s)
+        super().__init__(self.dir,self.tn,self.tr_s,self.te_s,self.va_s,self.shuffle)
         dataset=super().get_train_test_validation()
         
         self.train_set=dataset[0]
