@@ -1,7 +1,7 @@
 from dataset_informations import partitioner
 import numpy as np
 class batcher(partitioner):
-    def __init__(self, directories, tree_name,batch_size=64,training_size=1,testing_size=0,validation_size=0,shuffle=False):
+    def __init__(self, directories, tree_name,batch_size=64,training_size=0.5,testing_size=0.3,validation_size=0.2,shuffle=False):
         self.dir=directories
         self.tn=tree_name
         
@@ -38,31 +38,15 @@ class batcher(partitioner):
             self.batch_per_dir.append([tr_batch,te_batch,va_batch])
 
 
-        #per ognuno dei tre set, trovo la directory che contiene MENO batch rispetto a quelli che dovrebbe avere
-        #  che non è quella con meno eventi,
-        #  ma quella la cui differenza tra eventi che compongono effettivamente il batch ed eventi che che in proporzione dovrebbero 
-        #comporre il batch è MASSIMA
+        #definiamo il numero di batch in base alla directory che ne contiene il numero minore 
+        #per ogni set
 
-        tr_mod=0
-        te_mod=0
-        va_mod=0
-        self.dir_mods=[-1,-1,-1]
-        for i,dir in enumerate(self.set_per_dir):
-            if (self.batch_per_dir[i][0]-(dir[0]/self.tot_tr)*self.bs)>tr_mod:
-                tr_mod=self.batch_per_dir[i][0]-(dir[0]/self.tot_tr)*self.bs
-                self.dir_mods[0]=i
-            if (self.batch_per_dir[i][1]-(dir[1]/self.tot_te)*self.bs)>te_mod:
-                te_mod=self.batch_per_dir[i][1]-(dir[1]/self.tot_te)*self.bs
-                self.dir_mods[1]=i
-            if (self.batch_per_dir[i][2]-(dir[2]/self.tot_va)*self.bs)>va_mod:
-                va_mod=self.batch_per_dir[i][2]-(dir[2]/self.tot_va)*self.bs
-                self.dir_mods[2]=i
-
-        #per ogni set la directory che contiene il numero MINORE di batch decide il numero effettivo dei batch
-
-        self.num_batches=[0,0,0]
-        for i in range(len(self.num_batches)):
-            self.num_batches[i]=int(np.ceil(self.set_per_dir[self.dir_mods[i]][i]/self.batch_per_dir[self.dir_mods[i]][i]))
+        
+        self.num_batches=[-1,-1,-1]
+        for set,set_ev in enumerate(self.set_per_dir):
+            for set_batch,ev_in_batch in enumerate(self.batch_per_dir[set]):
+                if self.num_batches[set_batch]==-1 or self.num_batches[set_batch]>set_ev[set_batch]/ev_in_batch:
+                    self.num_batches[set_batch]=int(np.ceil(set_ev[set_batch]/ev_in_batch))
 
     def train_test_validation_batcher(self):
         self.batches_fl_tr=[]
