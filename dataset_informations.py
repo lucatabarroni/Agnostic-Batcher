@@ -33,11 +33,7 @@ class partitioner():
         
         for directory in self.dir:
             list_to_append=[os.path.join(directory, file) for file in os.listdir(directory)]
-            self.fl.append(list_to_append)
-##aggiunta dello shuffle dei file in ogni directory, in modo tale che si possano ottenere anche train,test e validation diversi
-        if self.shuffle:
-            for i in range(len(self.fl)):
-                random.shuffle(self.fl[i])                
+            self.fl.append(list_to_append)             
         
         for i,directory in enumerate(self.fl):
             sizes_to_append=[]
@@ -62,101 +58,38 @@ class partitioner():
 
         for tot_ev_ty in self.tot:
             self.perc.append(tot_ev_ty/self.total)
-        
-    def train_test_validation_split(self):
-        
-        for dir_idx,dir in enumerate(self.fl):
-            final_file=0
-            final_ev=0
-            
-            train_ev=self.set_per_dir[dir_idx][0]
-            tr_ev_fr_dir=0
-            complete_tr=False
 
-            test_ev=self.set_per_dir[dir_idx][1]
-            te_ev_fr_dir=0
-            complete_test=False
+        self.tot_list_fl=[]
+        self.tot_list_ev=[]
+        for i,directory in enumerate (self.fl):
+            list_dir_fl=[]
+            list_dir_ev=[]
+            for j,file in enumerate(directory):
+                file_list=[file]*self.fs[i][j]
+                ev_list=list(range(self.fs[i][j]))
+                list_dir_fl=list_dir_fl+file_list
+                list_dir_ev=list_dir_ev+ev_list
+            self.tot_list_fl.append(list_dir_fl)
+            self.tot_list_ev.append(list_dir_ev)
 
-            val_ev=self.set_per_dir[dir_idx][2]
-            val_ev_fr_dir=0
-            complete_val=False
-            
-            for tr_file_idx in range(final_file,len(dir)):
-                file=dir[tr_file_idx]
-                for ev_idx in range(final_ev,self.fs[dir_idx][tr_file_idx]):
-                    tr_ev_fr_dir+=1
-                    if tr_ev_fr_dir==train_ev:
-                        complete_tr=True
-                        final_file=file
-                        self.fl_tr[dir_idx].append(final_file)
-                        self.fs_tr[dir_idx].append([final_ev,ev_idx+1])
-                        final_ev=ev_idx+1
-                        break
-                if complete_tr:
-                    break
-                else:
-                    self.fl_tr[dir_idx].append(file)
-                    self.fs_tr[dir_idx].append([final_ev,ev_idx+1])
-                    final_ev=0
-            final_file=tr_file_idx
-            
-            for te_file_idx in range(final_file,len(dir)):
-                file=dir[te_file_idx]
-                for ev_idx in range(final_ev,self.fs[dir_idx][te_file_idx]):
-                    te_ev_fr_dir+=1
-                    if te_ev_fr_dir==test_ev:
-                        complete_test=True
-                        final_file=file
-                        self.fl_te[dir_idx].append(final_file)
-                        self.fs_te[dir_idx].append([final_ev,ev_idx+1])
-                        final_ev=ev_idx+1
-                        break
-                if complete_test:
-                    break
-                else:
-                    self.fl_te[dir_idx].append(file)
-                    self.fs_te[dir_idx].append([final_ev,ev_idx+1])
-                    final_ev=0
-            final_file=te_file_idx
-
-            for va_file_idx in range(final_file,len(dir)):
-                file=dir[va_file_idx]
-                for ev_idx in range(final_ev,self.fs[dir_idx][va_file_idx]):
-                    val_ev_fr_dir+=1
-                    if val_ev_fr_dir==val_ev:
-                        complete_val=True
-                        final_file=file
-                        self.fl_va[dir_idx].append(final_file)
-                        self.fs_va[dir_idx].append([final_ev,ev_idx+1])
-                        final_ev=ev_idx+1
-                        break
-                if complete_val:
-                    break
-                else:
-                    self.fl_va[dir_idx].append(file)
-                    self.fs_va[dir_idx].append([final_ev,ev_idx+1])
-                    final_ev=0
-                    
     def get_train_test_validation(self):
+        if self.shuffle:
+            for i in range(len(self.tot_list_fl)):
+                list_1=self.tot_list_fl[i]
+                list_2=self.tot_list_ev[i]
+                couples=list(zip(list_1,list_2))
+                random.shuffle(couples)
+                list_1,list_2=zip(*couples)
+                self.tot_list_fl[i]=list(list_1)
+                self.tot_list_ev[i]=list(list_2)
         
-        self.fl_tr=[]
-        self.fs_tr=[]
-
-        self.fl_te=[]
-        self.fs_te=[]
-        
-        self.fl_va=[]
-        self.fs_va=[]
-
-        for i in range(len(self.fl)):
-            self.fl_tr.append([])
-            self.fs_tr.append([])
-            self.fl_te.append([])
-            self.fs_te.append([])
-            self.fl_va.append([])
-            self.fs_va.append([])          
-
-        
-        self.train_test_validation_split()
-        
+        for i in range(len(self.set_per_dir)):
+            tr,te,va=self.set_per_dir[i]
+            self.fl_tr.append(self.tot_list_fl[i][:tr])
+            self.fs_tr.append(self.tot_list_ev[i][:tr])
+            self.fl_te.append(self.tot_list_fl[i][tr:tr+te])
+            self.fs_te.append(self.tot_list_ev[i][tr:tr+te])
+            self.fl_va.append(self.tot_list_fl[i][tr+te:])
+            self.fs_va.append(self.tot_list_ev[i][tr+te:])
         return [self.fl_tr,self.fs_tr],[self.fl_te,self.fs_te],[self.fl_va,self.fs_va]
+            

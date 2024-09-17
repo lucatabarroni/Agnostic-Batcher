@@ -62,93 +62,29 @@ class batcher(partitioner):
             self.batches_fl_tr.append([])
             self.batches_ev_tr.append([])
 
+        for i in range(self.num_batches[0]):
+            for j in range(len(self.dir)):
+                self.batches_fl_tr[i].append(self.train_set[0][j][i*self.batch_per_dir[j][0]:(i+1)*self.batch_per_dir[j][0]])
+                self.batches_ev_tr[i].append(self.train_set[1][j][i*self.batch_per_dir[j][0]:(i+1)*self.batch_per_dir[j][0]])
+
         for i in range(self.num_batches[1]):
             self.batches_fl_te.append([])
             self.batches_ev_te.append([])
 
+        for i in range(self.num_batches[1]):
+            for j in range(len(self.dir)):
+                self.batches_fl_te[i].append(self.test_set[0][j][i*self.batch_per_dir[j][1]:(i+1)*self.batch_per_dir[j][1]])
+                self.batches_ev_te[i].append(self.test_set[1][j][i*self.batch_per_dir[j][1]:(i+1)*self.batch_per_dir[j][1]])
+            
         for i in range(self.num_batches[2]):
             self.batches_fl_va.append([])
             self.batches_ev_va.append([])
-    
-        for i,dir in enumerate(self.train_set[0]):
-            starting_file=0
-            starting_ev=self.train_set[1][i][0][0]
-            for batch_idx in range(self.num_batches[0]):
-                ev_in_batch=0
-                batch_complete=False
-                for j in range(starting_file,len(dir)):
-                    file=dir[j]
-                    for ev_idx in range(starting_ev,self.train_set[1][i][j][1]):
-                        ev_in_batch+=1
-                        if ev_in_batch==self.batch_per_dir[i][0]:
-                            batch_complete=True
-                            self.batches_fl_tr[batch_idx].append(file)
-                            self.batches_ev_tr[batch_idx].append([starting_ev,ev_idx+1])
-                            starting_ev=ev_idx+1
-                            starting_file=j
-                            break
-                    if batch_complete:
-                        break
-                    else:
-                        self.batches_fl_tr[batch_idx].append(file)
-                        self.batches_ev_tr[batch_idx].append([starting_ev,ev_idx+1])
-                        if j<(len(dir)-1):
-                            starting_ev=self.train_set[1][i][j+1][0]
-                        else:
-                            break
 
-        for i,dir in enumerate(self.test_set[0]):
-            starting_file=0
-            starting_ev=self.test_set[1][i][0][0]
-            for batch_idx in range(self.num_batches[1]):
-                ev_in_batch=0
-                batch_complete=False
-                for j in range(starting_file,len(dir)):
-                    file=dir[j]
-                    for ev_idx in range(starting_ev,self.test_set[1][i][j][1]):
-                        ev_in_batch+=1
-                        if ev_in_batch==self.batch_per_dir[i][1]:
-                            batch_complete=True
-                            self.batches_fl_te[batch_idx].append(file)
-                            self.batches_ev_te[batch_idx].append([starting_ev,ev_idx+1])
-                            starting_ev=ev_idx+1
-                            starting_file=j
-                            break
-                    if batch_complete:
-                        break
-                    else:
-                        self.batches_fl_te[batch_idx].append(file)
-                        self.batches_ev_te[batch_idx].append([starting_ev,ev_idx+1])
-                        if j<(len(dir)-1):
-                            starting_ev=self.test_set[1][i][j+1][0]
-                        else:
-                            break
+        for i in range(self.num_batches[2]):
+            for j in range(len(self.dir)):
+                self.batches_fl_va[i].append(self.validation_set[0][j][i*self.batch_per_dir[j][2]:(i+1)*self.batch_per_dir[j][2]])
+                self.batches_ev_va[i].append(self.validation_set[1][j][i*self.batch_per_dir[j][2]:(i+1)*self.batch_per_dir[j][2]])
 
-        for i,dir in enumerate(self.validation_set[0]):
-            starting_file=0
-            starting_ev=self.validation_set[1][i][0][0]
-            for batch_idx in range(self.num_batches[2]):
-                ev_in_batch=0
-                batch_complete=False
-                for j in range(starting_file,len(dir)):
-                    file=dir[j]
-                    for ev_idx in range(starting_ev,self.validation_set[1][i][j][1]):
-                        ev_in_batch+=1
-                        if ev_in_batch==self.batch_per_dir[i][2]:
-                            batch_complete=True
-                            self.batches_fl_va[batch_idx].append(file)
-                            self.batches_ev_va[batch_idx].append([starting_ev,ev_idx+1])
-                            starting_ev=ev_idx+1
-                            starting_file=j
-                            break
-                    if batch_complete:
-                        break
-                    else:
-                        self.batches_fl_va[batch_idx].append(file)
-                        self.batches_ev_va[batch_idx].append([starting_ev,ev_idx+1])
-                        if j<(len(dir)-1):
-                            starting_ev=self.validation_set[1][i][j+1][0]
-                        else:
-                            break
-
-        return [self.batches_fl_tr,self.batches_ev_tr],[self.batches_fl_te,self.batches_ev_te],[self.batches_fl_va,self.batches_ev_va] 
+        
+        
+        return [self.batches_fl_tr,self.batches_ev_tr],[self.batches_fl_te,self.batches_ev_te],[self.batches_fl_va,self.batches_ev_va]
