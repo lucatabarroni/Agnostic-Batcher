@@ -52,12 +52,6 @@ class batcher(partitioner):
         self.batches_fl_tr=[]
         self.batches_ev_tr=[]
 
-        self.batches_fl_te=[]
-        self.batches_ev_te=[]
-
-        self.batches_fl_va=[]
-        self.batches_ev_va=[]
-
         for i in range(self.num_batches[0]):
             self.batches_fl_tr.append([])
             self.batches_ev_tr.append([])
@@ -67,6 +61,9 @@ class batcher(partitioner):
                 self.batches_fl_tr[i].append(self.train_set[0][j][i*self.batch_per_dir[j][0]:(i+1)*self.batch_per_dir[j][0]])
                 self.batches_ev_tr[i].append(self.train_set[1][j][i*self.batch_per_dir[j][0]:(i+1)*self.batch_per_dir[j][0]])
 
+        self.batches_fl_te=[]
+        self.batches_ev_te=[]
+
         for i in range(self.num_batches[1]):
             self.batches_fl_te.append([])
             self.batches_ev_te.append([])
@@ -75,6 +72,9 @@ class batcher(partitioner):
             for j in range(len(self.dir)):
                 self.batches_fl_te[i].append(self.test_set[0][j][i*self.batch_per_dir[j][1]:(i+1)*self.batch_per_dir[j][1]])
                 self.batches_ev_te[i].append(self.test_set[1][j][i*self.batch_per_dir[j][1]:(i+1)*self.batch_per_dir[j][1]])
+
+        self.batches_fl_va=[]
+        self.batches_ev_va=[]
             
         for i in range(self.num_batches[2]):
             self.batches_fl_va.append([])
