@@ -12,36 +12,21 @@ class partitioner():
         self.test_size=te_size
         self.validation_size=val_size
         self.shuffle=shuffle
-        
+
         self.fl=[]
-        self.fs=[]
-        self.tot=[]
-        
-        self.fl_tr=[]
-        self.fs_tr=[]
-
-        self.fl_te=[]
-        self.fs_te=[]
-
-
-        self.fl_va=[]
-        self.fs_va=[]
-
-        #self.dir_tr=[]
-        #self.dir_te=[]
-        #self.dir_va=[]
-        
         for directory in self.dir:
             list_to_append=[os.path.join(directory, file) for file in os.listdir(directory)]
-            self.fl.append(list_to_append)             
-        
+            self.fl.append(list_to_append)
+
+        self.fs=[]
         for i,directory in enumerate(self.fl):
             sizes_to_append=[]
             for file in directory:
                 with uproot.open(file) as f:
                     sizes_to_append.append((f[self.tn[i]].num_entries))
             self.fs.append(sizes_to_append)
-            
+
+        self.tot=[]
         for ev in self.fs:
             self.tot.append(sum(ev))
 
@@ -53,9 +38,9 @@ class partitioner():
             per_dir=[tr,te,va]
             self.set_per_dir.append(per_dir)
 
-        self.perc=[]
         self.total=sum(self.tot)
 
+        self.perc=[]
         for tot_ev_ty in self.tot:
             self.perc.append(tot_ev_ty/self.total)
 
@@ -71,6 +56,15 @@ class partitioner():
                 list_dir_ev=list_dir_ev+ev_list
             self.tot_list_fl.append(list_dir_fl)
             self.tot_list_ev.append(list_dir_ev)
+
+        self.fl_tr=[]
+        self.fs_tr=[]
+
+        self.fl_te=[]
+        self.fs_te=[]
+
+        self.fl_va=[]
+        self.fs_va=[]
 
     def get_train_test_validation(self):
         if self.shuffle:
