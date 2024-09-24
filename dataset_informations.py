@@ -3,17 +3,21 @@ import uproot
 import os
 import pickle
 import random
-# The module is devoted to divide the whole dataset in the three sets. Each dataset needs to respect the proportion of the different directory's populations.
-# As input it takes the path of the directories and in output it gives six couples of lists, two for each set.
-# In the first list of the couple we store the names of the files that will form the set. In the second list we save the event_id of the events inside the files that will form the set.
+"""
+The module is devoted to divide the whole dataset in the three sets. Each dataset needs to respect the proportion of the different directory's populations.
+As input it takes the path of the directories and in output it gives six couples of lists, two for each set.
+In the first list of the couple we store the names of the files that will form the set. In the second list we save the event_id of the events inside the files that will form the set.
+"""
 class partitioner():
-    #In the builder as input:
-    # -the path of the directories, store them in self.dir
-    # -the names of the tree where to take the elements from the files, store them in self.tn
-    # -the size of the three different sets, store them in self.train_size, self.test_size and self.validation_size
-    # -the variable used to decide wether or not to shuffle the dataset, stored in self.shuffle
+    """In the builder as input:
+        -the path of the directories, store them in self.dir
+        -the names of the tree where to take the elements from the files, store them in self.tn
+        -the size of the three different sets, store them in self.train_size, self.test_size and self.validation_size
+        -the variable used to decide wether or not to shuffle the dataset, stored in self.shuffle
+    """
     def __init__(self,directories,tree_name,tr_size=0.5,te_size=0.3,val_size=0.2,shuffle=False):
-        # self.dir is a list and each element is the path of a directory 
+        # instantiate a list of directory paths <------------ più parlante, meno riferimenti a nomi di variabili, devi spiegare COSA stai facendo.
+        #       se proprio vuoi indicare il tipo usa nomenclature più stringate: dir: list[str]
         self.dir=directories
         # self.tn is a list and each elment is the name of three from which we take the events from the file in the corresponding directory in self.dir
         self.tn=tree_name
@@ -98,6 +102,9 @@ class partitioner():
     # the second element of the first couple contains self.fs_tr. If in self.fl_tr the elements are the file names
     # that go in the train set, in self.fs_tr we store the event_id that go in the train set.
     def get_train_test_validation(self):
+        """
+        Le docstring vanno inserite dopo la firma della funzione! ^ non sopra
+        """
         # this is used to shuffle self.tot_list_fl and self.tot_list_ev, in order to divide the events randomly in the three sets
         if self.shuffle:
             for i in range(len(self.tot_list_fl)):
