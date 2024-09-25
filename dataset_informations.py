@@ -68,12 +68,8 @@ class partitioner():
         for tot_ev_ty in self.tot:
             self.perc.append(tot_ev_ty/self.total)
 
-        # self.tot_list_fl is a list of lists. It contains as many elements as the number of directories. Each elements is the list of files contained in the directory.
-        #                                     Each file name's is repeated as many times as the number of events in the file.
-        #                                     e.g. let's say that in the first directory dir_0 we have file_0 and file_1. If in file_0 we have three events and in file_1 we have two events,
-        #                                     the first element of self.tot_list_fl will be [file_0,file_0,file_0,file_1,file_1]
-        #self.tot_list_ev is a list of lists. It contains as many elemnts as the number of directories. Each element is the list of events id contained in the files of the directory.
-        #                                     if we stick with the previous example, the first element of self.tot_list_ev will be [0,1,2,0,1]
+        # tot_list_fl :list[list[str]] save the names of the files in the directory repeated as many times as the number of events in each file
+        # tot_list_ev :list[list[int]] save the list of events id of each file in each directory
         self.tot_list_fl=[]
         self.tot_list_ev=[]
         for i,directory in enumerate (self.fl):
@@ -103,7 +99,7 @@ class partitioner():
             the second element of the first couple contains self.fs_tr. If in self.fl_tr the elements are the file names
             that go in the train set, in self.fs_tr we store the event_id that go in the train set.
         """
-        # this is used to shuffle self.tot_list_fl and self.tot_list_ev, in order to divide the events randomly in the three sets
+        # shuffle tot_list_fl and tot_list_ev
         if self.shuffle:
             for i in range(len(self.tot_list_fl)):
                 list_1=self.tot_list_fl[i]
@@ -114,8 +110,8 @@ class partitioner():
                 self.tot_list_fl[i]=list(list_1)
                 self.tot_list_ev[i]=list(list_2)
 
-        # using the information in self.set_per_dir we fill, from each directory, the list defining the event composing each set, 
-        #i.e. [self.fl_tr,self.fs_tr],[self.fl_te,self.fs_te],[self.fl_va,self.fs_va]
+        # fl_tr :list[str] save the file names for train
+        # fs_tr :list[int] id of the events for train
         for i in range(len(self.set_per_dir)):
             tr,te,va=self.set_per_dir[i]
             self.fl_tr.append(self.tot_list_fl[i][:tr])
