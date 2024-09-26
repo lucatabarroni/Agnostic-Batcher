@@ -16,37 +16,14 @@ class Loader(batcher):
         dataset=super().train_test_validation_batcher()
         
         self.train_dataset=dataset[0]
-        self.train_file_list=[]
-        self.train_ev_list=[]
-        for i in range (len(self.train_dataset[0])):
-            file_batch=[]
-            ev_batch=[]
-            for j in range (len(self.train_dataset[0][i])):
-                file_batch=file_batch+self.train_dataset[0][i][j]
-                ev_batch=ev_batch+self.train_dataset[1][i][j]
-            self.train_file_list.append(file_batch)
-            self.train_ev_list.append(ev_batch)
+        self.train_file_list=self.train_dataset[0]
+        self.train_ev_list=self.train_dataset[1]
         
         self.test_dataset=dataset[1]
-        self.test_file_list=[]
-        self.test_ev_list=[]
-        for i in range (len(self.test_dataset[0])):
-            file_batch=[]
-            ev_batch=[]
-            for j in range (len(self.test_dataset[0][i])):
-                file_batch=file_batch+self.test_dataset[0][i][j]
-                ev_batch=ev_batch+self.test_dataset[1][i][j]
-            self.test_file_list.append(file_batch)
-            self.test_ev_list.append(ev_batch)
+        self.test_file_list=self.test_dataset[0]
+        self.test_ev_list=self.test_dataset[1]
+        
         
         self.validation_dataset=dataset[2]
-        self.validation_file_list=[]
-        self.validation_ev_list=[]
-        for i in range (len(self.validation_dataset[0])):
-            file_batch=[]
-            ev_batch=[]
-            for j in range (len(self.validation_dataset[0][i])):
-                file_batch=file_batch+self.validation_dataset[0][i][j]
-                ev_batch=ev_batch+self.validation_dataset[1][i][j]
-            self.validation_file_list.append(file_batch)
-            self.validation_ev_list.append(ev_batch)
+        self.validation_file_list=self.validation_dataset[0]
+        self.validation_ev_list=self.validation_dataset[1]

@@ -21,13 +21,13 @@ class partitioner():
         self.dir=directories
         # istantiate a list of tree names tn:list[str]
         self.tn=tree_name
-        # istantiate the ratio train/dataset
+        # define the ratio train/dataset
         self.train_size=tr_size
-        # istantiate the ratio test/dataset
+        # define the ratio test/dataset
         self.test_size=te_size
-        # istantiate the ration validation/dataset
+        # define the ration validation/dataset
         self.validation_size=val_size
-        # istantiate the shuffle of the dataset
+        # define the shuffle of the dataset
         self.shuffle=shuffle
 
         # fl :list[list[str]] save file names for each directory 

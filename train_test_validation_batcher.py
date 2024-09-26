@@ -14,7 +14,7 @@ class batcher(partitioner):
         -the minimum size of the batches self.batch_size
         -the size of the three different sets, store them in self.train_size, self.test_size and self.validation_size
         -the variable used to decide wether or not to shuffle the dataset, stored in self.shuffle
-    """
+    """ 
     def __init__(self, directories, tree_name,batch_size=64,training_size=0.5,testing_size=0.3,validation_size=0.2,shuffle=False):
         # instantiate a list of directory paths dir :list[str]
         self.dir=directories
@@ -90,8 +90,8 @@ class batcher(partitioner):
         
         for i in range(self.num_batches[0]):
             for j in range(len(self.dir)):
-                self.batches_fl_tr[i].append(self.train_set[0][j][i*self.batch_per_dir[j][0]:(i+1)*self.batch_per_dir[j][0]])
-                self.batches_ev_tr[i].append(self.train_set[1][j][i*self.batch_per_dir[j][0]:(i+1)*self.batch_per_dir[j][0]])
+                self.batches_fl_tr[i].extend(self.train_set[0][j][i*self.batch_per_dir[j][0]:(i+1)*self.batch_per_dir[j][0]])
+                self.batches_ev_tr[i].extend(self.train_set[1][j][i*self.batch_per_dir[j][0]:(i+1)*self.batch_per_dir[j][0]])
 
         self.batches_fl_te=[]
         self.batches_ev_te=[]
@@ -102,8 +102,8 @@ class batcher(partitioner):
 
         for i in range(self.num_batches[1]):
             for j in range(len(self.dir)):
-                self.batches_fl_te[i].append(self.test_set[0][j][i*self.batch_per_dir[j][1]:(i+1)*self.batch_per_dir[j][1]])
-                self.batches_ev_te[i].append(self.test_set[1][j][i*self.batch_per_dir[j][1]:(i+1)*self.batch_per_dir[j][1]])
+                self.batches_fl_te[i].extend(self.test_set[0][j][i*self.batch_per_dir[j][1]:(i+1)*self.batch_per_dir[j][1]])
+                self.batches_ev_te[i].extend(self.test_set[1][j][i*self.batch_per_dir[j][1]:(i+1)*self.batch_per_dir[j][1]])
 
         self.batches_fl_va=[]
         self.batches_ev_va=[]
@@ -114,8 +114,8 @@ class batcher(partitioner):
 
         for i in range(self.num_batches[2]):
             for j in range(len(self.dir)):
-                self.batches_fl_va[i].append(self.validation_set[0][j][i*self.batch_per_dir[j][2]:(i+1)*self.batch_per_dir[j][2]])
-                self.batches_ev_va[i].append(self.validation_set[1][j][i*self.batch_per_dir[j][2]:(i+1)*self.batch_per_dir[j][2]])
+                self.batches_fl_va[i].extend(self.validation_set[0][j][i*self.batch_per_dir[j][2]:(i+1)*self.batch_per_dir[j][2]])
+                self.batches_ev_va[i].extend(self.validation_set[1][j][i*self.batch_per_dir[j][2]:(i+1)*self.batch_per_dir[j][2]])
 
         
         
