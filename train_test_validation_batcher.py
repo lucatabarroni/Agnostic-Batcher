@@ -7,7 +7,7 @@ import numpy as np
     In the second we find the event ids also saved in groups of batch-size elements.
 """
 class batcher(partitioner):
-     """
+    """
         In the builder as input:
         -the path of the directories, store them in self.dir
         -the names of the tree where to take the elements from the files, store them in self.tn
