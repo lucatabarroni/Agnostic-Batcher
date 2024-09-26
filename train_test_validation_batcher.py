@@ -18,17 +18,17 @@ class batcher(partitioner):
     def __init__(self, directories, tree_name,batch_size=64,training_size=0.5,testing_size=0.3,validation_size=0.2,shuffle=False):
         # instantiate a list of directory paths dir :list[str]
         self.dir=directories
-        # istantiate a list of tree names tn:list[str]
+        # instantiate a list of tree names tn:list[str]
         self.tn=tree_name
-        # istantiate the minimum size of the batch
+        # instantiate the minimum size of the batch
         self.bs=batch_size
-        # istantiate the ratio train/dataset
+        # instantiate the ratio train/dataset
         self.tr_s=training_size
-        # istantiate the ratio test/dataset
+        # instantiate the ratio test/dataset
         self.te_s=testing_size
-        # istantiate the ratio validation/dataset
+        # instantiate the ratio validation/dataset
         self.va_s=validation_size
-        # istantiate the shuffle of the dataset
+        # instantiate the shuffle of the dataset
         self.shuffle=shuffle
 
         super().__init__(self.dir,self.tn,self.tr_s,self.te_s,self.va_s,self.shuffle)
@@ -82,12 +82,13 @@ class batcher(partitioner):
         self.batches_fl_tr=[]
         self.batches_ev_tr=[]
 
-        # istantiate list of batches
+        # instantiate list of batches
         for i in range(self.num_batches[0]):
             self.batches_fl_tr.append([])
             self.batches_ev_tr.append([])
 
-        
+        # batches_fl_tr :list[list[str]] save the file names batch by batch
+        # batches_fs_tr :list[list[int]] save the event id batch by batch
         for i in range(self.num_batches[0]):
             for j in range(len(self.dir)):
                 self.batches_fl_tr[i].extend(self.train_set[0][j][i*self.batch_per_dir[j][0]:(i+1)*self.batch_per_dir[j][0]])
