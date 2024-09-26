@@ -19,15 +19,15 @@ class partitioner():
     def __init__(self,directories,tree_name,tr_size=0.5,te_size=0.3,val_size=0.2,shuffle=False):
         # instantiate a list of directory paths dir :list[str]
         self.dir=directories
-        # istantiate a list of tree names tn:list[str]
+        # instantiate a list of tree names tn:list[str]
         self.tn=tree_name
-        # define the ratio train/dataset
+        # instantiate the ratio train/dataset
         self.train_size=tr_size
-        # define the ratio test/dataset
+        # instantiate the ratio test/dataset
         self.test_size=te_size
-        # define the ration validation/dataset
-        self.validation_size=val_size
-        # define the shuffle of the dataset
+        # instantiate the ration validation/dataset
+        selnf.validation_size=val_size
+        # istantiate the shuffle of the dataset
         self.shuffle=shuffle
 
         # fl :list[list[str]] save file names for each directory 
