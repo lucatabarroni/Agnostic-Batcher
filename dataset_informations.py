@@ -17,8 +17,7 @@ class partitioner():
         -the variable used to decide wether or not to shuffle the dataset, stored in self.shuffle
     """
     def __init__(self,directories,tree_name,tr_size=0.5,te_size=0.3,val_size=0.2,shuffle=False):
-        # instantiate a list of directory paths dir :list[str] <------------ più parlante, meno riferimenti a nomi di variabili, devi spiegare COSA stai facendo.
-        #       se proprio vuoi indicare il tipo usa nomenclature più stringate: dir: list[str]
+        # instantiate a list of directory paths dir :list[str]
         self.dir=directories
         # istantiate a list of tree names tn:list[str]
         self.tn=tree_name
