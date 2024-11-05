@@ -26,7 +26,7 @@ class partitioner():
         # instantiate the ratio test/dataset
         self.test_size=te_size
         # instantiate the ration validation/dataset
-        selnf.validation_size=val_size
+        self.validation_size=val_size
         # istantiate the shuffle of the dataset
         self.shuffle=shuffle
 
