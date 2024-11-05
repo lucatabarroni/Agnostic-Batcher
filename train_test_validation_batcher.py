@@ -60,16 +60,30 @@ class batcher(partitioner):
             va_batch=int(np.ceil((dir[2]/self.tot_va)*self.bs))
             self.batch_per_dir.append([tr_batch,te_batch,va_batch])
 
-
-        #definiamo il numero di batch in base alla directory che ne contiene il numero minore 
-        #per ogni set
+        self.tr_batch_ev=0
+        self.te_batch_ev=0
+        self.va_batch_ev=0
+        for batch in self.batch_per_dir:
+            self.tr_batch_ev+=batch[0]
+            self.te_batch_ev+=batch[1]
+            self.va_batch_ev+=batch[2]
+        #definiamo il numero di batch per ogni set
 
         # num_batches :list[int] number of batches for each set
         self.num_batches=[-1,-1,-1]
+        '''
+        self.num_batches[0]=int(self.tot_tr/self.tr_batch_ev)+1
+        self.num_batches[1]=int(self.tot_te/self.te_batch_ev)+1
+        self.num_batches[2]=int(self.tot_va/self.va_batch_ev)+1
+        
+        '''
+        #definiamo il numero di batch in base alla directory che ne contiene il numero minore 
+        #per ogni set
         for set,set_ev in enumerate(self.set_per_dir):
             for set_batch,ev_in_batch in enumerate(self.batch_per_dir[set]):
                 if self.num_batches[set_batch]==-1 or self.num_batches[set_batch]>set_ev[set_batch]/ev_in_batch:
                     self.num_batches[set_batch]=int(np.ceil(set_ev[set_batch]/ev_in_batch))
+        
 
     def train_test_validation_batcher(self):
         """
@@ -86,14 +100,13 @@ class batcher(partitioner):
         for i in range(self.num_batches[0]):
             self.batches_fl_tr.append([])
             self.batches_ev_tr.append([])
-
+        
         # batches_fl_tr :list[list[str]] save the file names batch by batch
         # batches_fs_tr :list[list[int]] save the event id batch by batch
         for i in range(self.num_batches[0]):
             for j in range(len(self.dir)):
                 self.batches_fl_tr[i].extend(self.train_set[0][j][i*self.batch_per_dir[j][0]:(i+1)*self.batch_per_dir[j][0]])
                 self.batches_ev_tr[i].extend(self.train_set[1][j][i*self.batch_per_dir[j][0]:(i+1)*self.batch_per_dir[j][0]])
-
         self.batches_fl_te=[]
         self.batches_ev_te=[]
 
